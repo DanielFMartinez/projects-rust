@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  hello-rocket:
+    container_name: hello-rocket
+    image: test/hello-rocket:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: postgres://postgres:postgres@dbrocket:5432/postgres
+    ports:
+      - '8080:8080'
+    depends_on:
+      - dbrocket
+
+  dbrocket:
+    container_name: dbrocket
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5431:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
